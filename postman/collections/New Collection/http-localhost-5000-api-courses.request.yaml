@@ -1,0 +1,25 @@
+$kind: http-request
+name: http://localhost:5000/api/courses
+description: ""
+url: http://localhost:5000/api/courses
+method: POST
+body:
+  type: json
+  content: "\r
+
+    {\r
+
+    \  \"title\": \"Introduction to AI\",\r
+
+    \  \"instructor\": \"LearnSphere Team\",\r
+
+    \  \"description\": \"Explore artificial intelligence, machine learning, and real-world applications.\",\r
+
+    \  \"category\": \"Artificial Intelligence\",\r
+
+    \  \"duration\": \"10 weeks\",\r
+
+    \  \"price\": 0\r
+
+    }\r\n"
+order: 1000
