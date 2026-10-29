@@ -6,8 +6,8 @@ const dotenv = require('dotenv')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const Course = require('./models/Course')
-const User = require('./models/User')
+const Course = require('./models/course')
+const User = require('./models/user')
 const Enrollment = require('./models/Enrollment')
 
 dotenv.config()
@@ -20,7 +20,7 @@ app.use(express.json())
 const PORT = process.env.PORT || 5000
 
 // Authentication middleware
-function verifyToken(req, res, next) {
+async function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -32,14 +32,51 @@ function verifyToken(req, res, next) {
   const token = authHeader.split(' ')[1]
 
   try {
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({
+        message: 'JWT_SECRET is not configured.'
+      })
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    req.userId = decoded.userId
+
+    const user = await User.findById(decoded.userId).select('_id role')
+
+    if (!user) {
+      return res.status(401).json({
+        message: 'User account not found. Please log in again.'
+      })
+    }
+
+    req.userId = user._id.toString()
+    req.userRole = user.role || 'student'
+
     next()
   } catch (error) {
-    return res.status(401).json({
-      message: 'Invalid or expired token. Please log in again.'
+    if (
+      error.name === 'JsonWebTokenError' ||
+      error.name === 'TokenExpiredError'
+    ) {
+      return res.status(401).json({
+        message: 'Invalid or expired token. Please log in again.'
+      })
+    }
+
+    return res.status(500).json({
+      message: 'Authentication failed.'
     })
   }
+}
+
+// Admin authorization middleware
+function requireAdmin(req, res, next) {
+  if (req.userRole !== 'admin') {
+    return res.status(403).json({
+      message: 'Access denied. Admin privileges are required.'
+    })
+  }
+
+  next()
 }
 
 // Home route
@@ -66,8 +103,8 @@ app.get('/api/courses', async (req, res) => {
   }
 })
 
-// Create a course
-app.post('/api/courses', async (req, res) => {
+// Create a course - Admin only
+app.post('/api/courses', verifyToken, requireAdmin, async (req, res) => {
   try {
     const {
       title,
@@ -99,47 +136,107 @@ app.post('/api/courses', async (req, res) => {
   }
 })
 
-app.put('/api/courses/:id', verifyToken, async (req, res) => {
-  try {
-    const { title, instructor, description, category, duration, price } = req.body
+// Update a course - Admin only
+app.put(
+  '/api/courses/:id',
+  verifyToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      if (!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(400).json({
+          message: 'Invalid course ID.'
+        })
+      }
 
-    const course = await Course.findByIdAndUpdate(
-      req.params.id,
-      { title, instructor, description, category, duration, price },
-      { new: true, runValidators: true }
-    )
+      const {
+        title,
+        instructor,
+        description,
+        category,
+        duration,
+        price
+      } = req.body
 
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' })
+      const course = await Course.findByIdAndUpdate(
+        req.params.id,
+        {
+          title,
+          instructor,
+          description,
+          category,
+          duration,
+          price
+        },
+        {
+          new: true,
+          runValidators: true
+        }
+      )
+
+      if (!course) {
+        return res.status(404).json({
+          message: 'Course not found.'
+        })
+      }
+
+      res.json({
+        message: 'Course updated successfully',
+        course
+      })
+    } catch (error) {
+      res.status(400).json({
+        message: 'Unable to update course.'
+      })
     }
-
-    res.json({ message: 'Course updated successfully', course })
-  } catch (error) {
-    res.status(400).json({ message: 'Unable to update course' })
   }
-})
+)
 
-app.delete('/api/courses/:id', verifyToken, async (req, res) => {
-  try {
-    const course = await Course.findByIdAndDelete(req.params.id)
+// Delete a course - Admin only
+app.delete(
+  '/api/courses/:id',
+  verifyToken,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      if (!mongoose.isValidObjectId(req.params.id)) {
+        return res.status(400).json({
+          message: 'Invalid course ID.'
+        })
+      }
 
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' })
+      const course = await Course.findByIdAndDelete(req.params.id)
+
+      if (!course) {
+        return res.status(404).json({
+          message: 'Course not found.'
+        })
+      }
+
+      res.json({
+        message: 'Course deleted successfully'
+      })
+    } catch (error) {
+      res.status(400).json({
+        message: 'Unable to delete course.'
+      })
     }
-
-    res.json({ message: 'Course deleted successfully' })
-  } catch (error) {
-    res.status(400).json({ message: 'Unable to delete course' })
   }
-})
-
+)
 
 // Student registration
 app.post('/api/auth/register', async (req, res) => {
   try {
     const { name, email, password } = req.body
 
-    if (!name || !email || !password) {
+    if (
+      typeof name !== 'string' ||
+      typeof email !== 'string' ||
+      typeof password !== 'string' ||
+      !name.trim() ||
+      !email.trim() ||
+      !password
+    ) {
       return res.status(400).json({
         message: 'Name, email, and password are required.'
       })
@@ -171,10 +268,12 @@ app.post('/api/auth/register', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
+    // Never accept a role supplied by the registration form
     const user = await User.create({
       name: name.trim(),
       email: normalizedEmail,
-      password: hashedPassword
+      password: hashedPassword,
+      role: 'student'
     })
 
     res.status(201).json({
@@ -182,7 +281,8 @@ app.post('/api/auth/register', async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role
       }
     })
   } catch (error) {
@@ -198,12 +298,17 @@ app.post('/api/auth/register', async (req, res) => {
   }
 })
 
-// Student login
+// Login
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body
 
-    if (!email || !password) {
+    if (
+      typeof email !== 'string' ||
+      typeof password !== 'string' ||
+      !email.trim() ||
+      !password
+    ) {
       return res.status(400).json({
         message: 'Email and password are required.'
       })
@@ -236,10 +341,16 @@ app.post('/api/auth/login', async (req, res) => {
       })
     }
 
+    const role = user.role || 'student'
+
     const token = jwt.sign(
-      { userId: user._id.toString() },
+      {
+        userId: user._id.toString()
+      },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      {
+        expiresIn: '1h'
+      }
     )
 
     res.json({
@@ -248,7 +359,8 @@ app.post('/api/auth/login', async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        role
       }
     })
   } catch (error) {
@@ -310,7 +422,7 @@ app.post('/api/enrollments', verifyToken, async (req, res) => {
   }
 })
 
-// Get courses enrolled by the logged-in student
+// Get courses enrolled by the logged-in user
 app.get(
   '/api/enrollments/my-courses',
   verifyToken,
@@ -453,7 +565,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB connected successfully')
 
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`LearnSphere server running on port ${PORT}`)
     })
   })
