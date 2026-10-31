@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import API_BASE_URL from '../config'
 import './Auth.css'
 import './LearnCourse.css'
 
@@ -33,7 +34,7 @@ function LearnCourse() {
       return
     }
 
-    fetch(`http://localhost:5000/api/enrollments/course/${courseId}`, {
+    fetch(`${API_BASE_URL}/api/enrollments/course/${courseId}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -61,7 +62,7 @@ function LearnCourse() {
     setQuizLoading(true)
     setQuizError('')
 
-    fetch(`http://localhost:5000/api/quizzes/course/${courseId}`, {
+    fetch(`${API_BASE_URL}/api/quizzes/course/${courseId}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -95,7 +96,7 @@ function LearnCourse() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/enrollments/${courseData.enrollmentId}/lessons/${lessonId}`,
+        `${API_BASE_URL}/api/enrollments/${courseData.enrollmentId}/lessons/${lessonId}`,
         {
           method: 'PATCH',
           headers: {
@@ -130,7 +131,7 @@ function LearnCourse() {
       return url
     }
 
-    return `http://localhost:5000${url.startsWith('/') ? '' : '/'}${url}`
+    return `${API_BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`
   }
 
   async function openQuiz(quizId) {
@@ -143,7 +144,7 @@ function LearnCourse() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/quizzes/${quizId}`,
+        `${API_BASE_URL}/api/quizzes/${quizId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -207,7 +208,7 @@ function LearnCourse() {
       }))
 
       const response = await fetch(
-        `http://localhost:5000/api/quizzes/${selectedQuiz._id}/submit`,
+        `${API_BASE_URL}/api/quizzes/${selectedQuiz._id}/submit`,
         {
           method: 'POST',
           headers: {

@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 import './StudentProgress.css'
+import API_BASE_URL from '../config'
 
 function StudentProgress() {
   const [reports, setReports] = useState([])
@@ -12,7 +13,7 @@ function StudentProgress() {
       try {
         const token = localStorage.getItem('learnsphereToken')
 
-        const response = await fetch('http://localhost:5000/api/progress/my', {
+        const response = await fetch(`${API_BASE_URL}/api/progress/my`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -105,7 +106,7 @@ function StudentProgress() {
             <div className="certificate-status">
               {course.certificateEligible ? (
                 <a
-                  href={`http://localhost:5000/api/certificates/${course.courseId}/download`}
+                  href={`${API_BASE_URL}/api/certificates/${course.courseId}/download`}
                   onClick={(event) => {
                     event.preventDefault()
                     downloadCertificate(course.courseId)
@@ -114,7 +115,9 @@ function StudentProgress() {
                   Download Certificate
                 </a>
               ) : (
-                <span>Complete all lessons and pass all quizzes to earn your certificate.</span>
+                <span>
+                  Complete all lessons and pass all quizzes to earn your certificate.
+                </span>
               )}
             </div>
           </div>
@@ -128,7 +131,7 @@ function StudentProgress() {
       const token = localStorage.getItem('learnsphereToken')
 
       const response = await fetch(
-        `http://localhost:5000/api/certificates/${courseId}/download`,
+        `${API_BASE_URL}/api/certificates/${courseId}/download`,
         {
           headers: {
             Authorization: `Bearer ${token}`

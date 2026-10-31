@@ -1,5 +1,7 @@
+
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import API_BASE_URL from '../config'
 import './CertificateVerification.css'
 
 function CertificateVerification() {
@@ -23,7 +25,7 @@ function CertificateVerification() {
       setResult(null)
 
       const response = await fetch(
-        `http://localhost:5000/api/certificates/verify/${encodeURIComponent(
+        `${API_BASE_URL}/api/certificates/verify/${encodeURIComponent(
           certificateId.trim()
         )}`
       )
@@ -55,6 +57,7 @@ function CertificateVerification() {
         <Link to="/" className="verification-logo">
           LearnSphere
         </Link>
+
         <Link to="/" className="verification-home">
           Home
         </Link>
@@ -98,7 +101,9 @@ function CertificateVerification() {
             {result.valid ? (
               <>
                 <div className="result-icon">✓</div>
+
                 <h2>Certificate Verified!</h2>
+
                 <p className="result-message">{result.message}</p>
 
                 <div className="certificate-details">
@@ -134,7 +139,9 @@ function CertificateVerification() {
             ) : (
               <>
                 <div className="result-icon">✕</div>
+
                 <h2>Verification Failed</h2>
+
                 <p className="result-message">{result.message}</p>
               </>
             )}

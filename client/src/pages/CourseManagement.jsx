@@ -1,7 +1,9 @@
+
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import API_BASE_URL from '../config'
 
-const API = 'http://localhost:5000/api'
+const API = `${API_BASE_URL}/api`
 
 function CourseManagement() {
   const token = localStorage.getItem('learnsphereToken')
@@ -1321,7 +1323,7 @@ function CourseManagement() {
                           <a
                             href={
                               resource.url.startsWith('/uploads/')
-                                ? `http://localhost:5000${resource.url}`
+                                ? `${API_BASE_URL}${resource.url}`
                                 : resource.url
                             }
                             target="_blank"

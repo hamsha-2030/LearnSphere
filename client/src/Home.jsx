@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import API_BASE_URL from './config'
 import './App.css'
 
 function Home() {
@@ -13,16 +14,16 @@ function Home() {
   useEffect(() => {
     async function fetchCourses() {
       try {
-        const response = await fetch('http://localhost:5000/api/courses')
+        const response = await fetch(`${API_BASE_URL}/api/courses`)
         const data = await response.json()
 
         if (!response.ok) {
           throw new Error(data.message || 'Failed to load courses')
         }
 
-        setCourses(data)
-      } catch {
-        setError('Unable to load courses. Please check that the server is running.')
+        setCourses(Array.isArray(data) ? data : [])
+      } catch (err) {
+        setError(err.message || 'Unable to load courses. Please check that the server is running.')
       } finally {
         setLoading(false)
       }
@@ -40,7 +41,7 @@ function Home() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/enrollments', {
+      const response = await fetch(`${API_BASE_URL}/api/enrollments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import API_BASE_URL from '../config'
 import './Auth.css'
 
 function Dashboard() {
@@ -46,7 +47,7 @@ function Dashboard() {
     async function fetchProfile() {
       try {
         const response = await fetch(
-          'http://localhost:5000/api/profile',
+          `${API_BASE_URL}/api/profile`,
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -92,8 +93,8 @@ function Dashboard() {
     async function fetchCourses() {
       try {
         const url = admin
-          ? 'http://localhost:5000/api/courses'
-          : 'http://localhost:5000/api/enrollments/my-courses'
+          ? `${API_BASE_URL}/api/courses`
+          : `${API_BASE_URL}/api/enrollments/my-courses`
 
         const response = await fetch(url, {
           headers: {
@@ -158,7 +159,7 @@ function Dashboard() {
 
     try {
       const response = await fetch(
-        'http://localhost:5000/api/profile',
+        `${API_BASE_URL}/api/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -187,7 +188,7 @@ function Dashboard() {
 
     try {
       const response = await fetch(
-        'http://localhost:5000/api/profile',
+        `${API_BASE_URL}/api/profile`,
         {
           method: 'PUT',
           headers: {
