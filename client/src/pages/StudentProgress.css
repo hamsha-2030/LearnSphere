@@ -1,0 +1,150 @@
+
+.progress-page {
+  min-height: 100vh;
+  padding: 40px;
+  background: #f8f5ff;
+  color: #30234a;
+}
+
+.progress-header {
+  margin-bottom: 30px;
+}
+
+.progress-header h1 {
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.progress-header p {
+  color: #777;
+}
+
+.progress-card {
+  background: white;
+  padding: 25px;
+  margin-bottom: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(70, 40, 100, 0.08);
+}
+
+.course-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.course-heading span {
+  color: #8053c7;
+  font-weight: bold;
+}
+
+.progress-track {
+  height: 12px;
+  background: #eee7f8;
+  border-radius: 20px;
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8053c7, #d18bdc);
+  border-radius: 20px;
+}
+
+.progress-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.progress-stats div {
+  background: #faf7ff;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.progress-stats strong,
+.progress-stats span {
+  display: block;
+}
+
+.progress-stats strong {
+  font-size: 23px;
+  color: #8053c7;
+}
+
+.progress-stats span {
+  color: #777;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+.quiz-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.quiz-progress strong,
+.quiz-progress div span {
+  display: block;
+}
+
+.quiz-progress div span {
+  font-size: 13px;
+  color: #777;
+  margin-top: 5px;
+}
+
+.passed {
+  color: #16834c;
+  font-weight: bold;
+}
+
+.not-passed {
+  color: #d97706;
+  font-weight: bold;
+}
+
+.certificate-status {
+  margin-top: 25px;
+}
+
+.certificate-status a {
+  display: inline-block;
+  padding: 12px 22px;
+  background: #8053c7;
+  color: white;
+  text-decoration: none;
+  border-radius: 9px;
+  font-weight: bold;
+}
+
+.certificate-status span {
+  color: #777;
+}
+
+.error-message {
+  color: #c0392b;
+}
+
+@media (max-width: 650px) {
+  .progress-page {
+    padding: 20px;
+  }
+
+  .progress-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .course-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

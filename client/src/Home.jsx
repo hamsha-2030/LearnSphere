@@ -92,6 +92,10 @@ function Home() {
         </nav>
 
         <div className="nav-actions">
+          <Link to="/verify-certificate" className="dashboard-browse-button">
+            🏅 Verify Certificate
+          </Link>
+
           <Link to="/manage-courses" className="dashboard-browse-button">
             Manage Courses ⚙️
           </Link>
@@ -131,6 +135,9 @@ function Home() {
               <a href="#courses" className="hero-button">
                 Explore Courses →
               </a>
+              <Link to="/verify-certificate" className="hero-button hero-button-secondary">
+                🏅 Verify Certificate
+              </Link>
               <Link to="/manage-courses" className="hero-button hero-button-secondary">
                 Manage Courses ⚙️
               </Link>

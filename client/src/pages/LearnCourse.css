@@ -1,0 +1,251 @@
+
+.lesson-markdown {
+  margin-top: 15px;
+  color: #514b68;
+  line-height: 1.8;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.lesson-markdown h1,
+.lesson-markdown h2,
+.lesson-markdown h3,
+.lesson-markdown h4 {
+  color: #542b91;
+  margin: 18px 0 10px;
+  line-height: 1.4;
+}
+
+.lesson-markdown h1 {
+  font-size: 23px;
+}
+
+.lesson-markdown h2 {
+  font-size: 20px;
+}
+
+.lesson-markdown h3 {
+  font-size: 17px;
+}
+
+.lesson-markdown p {
+  margin: 10px 0;
+}
+
+.lesson-markdown ul,
+.lesson-markdown ol {
+  padding-left: 25px;
+  margin: 10px 0;
+}
+
+.lesson-markdown li {
+  margin-bottom: 6px;
+}
+
+.lesson-markdown strong {
+  color: #432078;
+  font-weight: 700;
+}
+
+.lesson-markdown code {
+  background: #f1eaff;
+  color: #6b35a5;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.lesson-markdown pre {
+  background: #261d35;
+  color: #ffffff;
+  padding: 16px;
+  border-radius: 10px;
+  overflow-x: auto;
+  margin: 14px 0;
+}
+
+.lesson-markdown pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.lesson-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+
+.lesson-markdown th,
+.lesson-markdown td {
+  border: 1px solid #e5d9f5;
+  padding: 10px;
+  text-align: left;
+}
+
+.lesson-markdown th {
+  background: #f1eaff;
+  color: #542b91;
+}
+
+.lesson-markdown blockquote {
+  border-left: 4px solid #9860ce;
+  padding: 8px 15px;
+  margin: 15px 0;
+  background: #f8f3ff;
+  border-radius: 5px;
+}
+
+.lesson-markdown a {
+  color: #793db5;
+  text-decoration: underline;
+}
+
+.learn-resources {
+  margin-top: 20px;
+}
+
+.student-quiz-section {
+  margin-top: 24px;
+  padding: 18px;
+  background: #f8f5ff;
+  border-radius: 12px;
+}
+
+.student-quiz-section h4 {
+  margin: 0 0 12px;
+}
+
+.student-quiz-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 14px;
+  margin-top: 10px;
+  background: white;
+  border: 1px solid #e4dcf5;
+  border-radius: 10px;
+}
+
+.student-quiz-card p {
+  margin: 5px 0 0;
+  color: #777;
+  font-size: 13px;
+}
+
+.student-quiz-card button,
+.student-quiz-heading button,
+.student-quiz-result button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #7651c9;
+  color: white;
+  cursor: pointer;
+}
+
+.student-quiz-panel {
+  margin-top: 30px;
+  padding: 24px;
+  background: white;
+  border: 1px solid #e5def2;
+  border-radius: 14px;
+}
+
+.student-quiz-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.student-quiz-heading p {
+  color: #7651c9;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.student-quiz-heading h2 {
+  margin: 5px 0;
+}
+
+.student-quiz-heading span {
+  color: #777;
+  font-size: 13px;
+}
+
+.student-question-card {
+  padding: 18px;
+  margin: 16px 0;
+  background: #faf9fd;
+  border-radius: 10px;
+}
+
+.student-question-card h3 {
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+.student-quiz-options {
+  display: grid;
+  gap: 10px;
+}
+
+.student-quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: white;
+  border: 1px solid #e2ddec;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.student-quiz-option.selected {
+  border-color: #7651c9;
+  background: #f2edff;
+}
+
+.student-quiz-option input {
+  accent-color: #7651c9;
+}
+
+.student-quiz-submit {
+  padding: 13px 22px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #7651c9;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.student-quiz-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.student-quiz-result {
+  padding: 25px;
+  text-align: center;
+  background: #f5f0ff;
+  border-radius: 12px;
+}
+
+.student-quiz-result strong {
+  display: block;
+  margin: 15px 0;
+  font-size: 34px;
+  color: #7651c9;
+}
+
+.student-quiz-error {
+  padding: 12px;
+  color: #b42318;
+  background: #fff0ef;
+  border-radius: 8px;
+}
